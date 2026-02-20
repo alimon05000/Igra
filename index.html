@@ -138,7 +138,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Game 1: Pole Chudes Elements */
+        /* Question and Game Elements */
         .question-box {
             font-size: 1.2rem;
             margin-bottom: 30px;
@@ -146,6 +146,7 @@
             background: rgba(0, 0, 0, 0.2);
             border-radius: 12px;
             border-left: 4px solid var(--accent-gold);
+            line-height: 1.5;
         }
 
         .word-board {
@@ -212,12 +213,14 @@
             background: var(--success);
             border-color: var(--success);
             color: white;
+            opacity: 1;
         }
 
         .key.wrong {
             background: var(--danger);
             border-color: var(--danger);
             color: white;
+            opacity: 0.5;
         }
 
         .stats {
@@ -225,10 +228,10 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
         }
 
-        /* Game 2: Guess the object Elements */
+        /* Input for Game 2 */
         .input-group {
             margin-bottom: 30px;
             position: relative;
@@ -261,7 +264,7 @@
             min-height: 20px;
         }
 
-        /* Modals */
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -289,10 +292,12 @@
             text-align: center;
             max-width: 400px;
             width: 90%;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
         }
 
         .modal-content h2 {
             margin-bottom: 15px;
+            color: var(--success);
         }
 
         .modal-content .correct-word {
@@ -310,7 +315,7 @@
         
         <div id="menu-screen" class="screen active glass-panel">
             <h1>Mind <span>Games</span></h1>
-            <p class="subtitle">Выберите интеллектуальное испытание. Премиальный опыт, сложные вопросы и проверка вашей эрудиции.</p>
+            <p class="subtitle">Идеальное испытание для разума. Сложные вопросы, премиальный дизайн и никаких провалов — только путь к правильному ответу.</p>
             
             <div class="menu-buttons">
                 <button class="btn btn-primary" onclick="startGame1()">Поле Чудес</button>
@@ -323,8 +328,7 @@
             <h2>Поле <span>Чудес</span></h2>
             
             <div class="stats">
-                <span id="g1-level">Вопрос: 1/15</span>
-                <span id="g1-lives">Ошибки: 0/1000</span>
+                <span id="g1-level">Вопрос: 1/30</span>
             </div>
 
             <div class="question-box" id="g1-question">
@@ -341,7 +345,7 @@
             <h2>Угадай <span>Вещь</span></h2>
             
             <div class="stats">
-                <span id="g2-level">Уровень: 1/15</span>
+                <span id="g2-level">Уровень: 1/30</span>
             </div>
 
             <div class="question-box" id="g2-description">
@@ -361,8 +365,8 @@
 
     <div class="modal-overlay" id="result-modal">
         <div class="modal-content">
-            <h2 id="modal-title">Победа!</h2>
-            <p>Загаданное слово было:</p>
+            <h2>Блестяще!</h2>
+            <p>Вы разгадали слово:</p>
             <div class="correct-word" id="modal-word">СЛОВО</div>
             <button class="btn btn-primary" id="modal-next-btn">Следующий вопрос</button>
             <button class="btn" onclick="showMenu()">В меню</button>
@@ -370,7 +374,7 @@
     </div>
 
     <script>
-        // --- DATA ---
+        // --- DATA (30 Questions Each) ---
 
         const dataGame1 = [
             { w: "ЭСПЕРАНТО", q: "Искусственный язык, созданный в 1887 году варшавским окулистом Людвиком Заменгофом." },
@@ -387,7 +391,22 @@
             { w: "ЭМАНСИПАЦИЯ", q: "Отказ от различного рода социальных зависимостей, в том числе детей от родителей, женщин от мужчин." },
             { w: "АПОГЕЙ", q: "Точка орбиты Луны или искусственного спутника Земли, наиболее удаленная от центра Земли." },
             { w: "МЕЛАНХОЛИЯ", q: "Термин, обозначавший в медицине прошлого психическое расстройство, сопровождающееся подавленным настроением. Введено Гиппократом." },
-            { w: "ОСТРАКИЗМ", q: "В Древних Афинах — народное голосование, во время которого граждане на глиняных черепках писали имя деятеля, угрожающего демократии." }
+            { w: "ОСТРАКИЗМ", q: "В Древних Афинах — народное голосование, во время которого граждане на глиняных черепках писали имя деятеля, угрожающего демократии." },
+            { w: "ЭКЛЕКТИКА", q: "Смешение, органичное или искусственное соединение разнородных стилей, идей, взглядов в архитектуре или философии." },
+            { w: "СИНГУЛЯРНОСТЬ", q: "Точка в пространстве-времени, например, в центре чёрной дыры, где математические функции физических величин стремятся к бесконечности." },
+            { w: "ПАРАДИГМА", q: "Совокупность фундаментальных научных установок, представлений и терминов, разделяемая научным сообществом в определенный период." },
+            { w: "КАТАРСИС", q: "Процесс высвобождения эмоций, разрешения внутренних конфликтов и нравственного возвышения, возникающий в ходе сопереживания." },
+            { w: "АМБИВАЛЕНТНОСТЬ", q: "Двойственность отношения к чему-либо; состояние, когда один и тот же объект вызывает одновременно два противоположных чувства." },
+            { w: "АНТРОПОГЕНЕЗ", q: "Часть биологической макроэволюции, которая привела к появлению человека разумного и формированию человеческого общества." },
+            { w: "ДЕРИВАТИВ", q: "Производный финансовый инструмент, договор, стоимость которого зависит от базового актива (например, фьючерс или опцион)." },
+            { w: "КОГНИЦИЯ", q: "Термин, используемый в психологии и науке, обозначающий способность к умственному восприятию и переработке внешней информации." },
+            { w: "ПЕРИГЕЙ", q: "Ближайшая к Земле точка орбиты обращающегося вокруг неё небесного тела, например, Луны." },
+            { w: "ЭПИСТЕМОЛОГИЯ", q: "Философско-методологическая дисциплина, исследующая знание как таковое, его строение, функционирование и развитие (теория познания)." },
+            { w: "ФИЛОГЕНЕЗ", q: "Историческое развитие живых организмов в процессе эволюции, как в целом, так и отдельных таксономических групп." },
+            { w: "ЭСХАТОЛОГИЯ", q: "Система религиозных и философских взглядов и представлений о конце истории, конце света и загробной жизни." },
+            { w: "ПАЛИМПСЕСТ", q: "Рукопись, написанная на пергаменте, уже бывшем в употреблении, старый текст которого был соскоблен или смыт." },
+            { w: "СИМУЛЯКР", q: "Копия, не имеющая оригинала в реальности; репрезентация чего-то, что на самом деле не существует." },
+            { w: "ДИХОТОМИЯ", q: "Раздвоенность, последовательное деление целого на две части, затем каждой из них снова на две части." }
         ];
 
         const dataGame2 = [
@@ -405,22 +424,35 @@
             { w: "АКСЕЛЕРОМЕТР", q: "Прибор, измеряющий проекцию кажущегося ускорения. Широко используется в современных смартфонах для определения ориентации экрана." },
             { w: "МЕТРОНОМ", q: "Прибор, отмечающий короткие промежутки времени равномерными ударами. В основном используется музыкантами как точный ориентир темпа." },
             { w: "ЦЕНТРИФУГА", q: "Устройство, использующее центробежную силу для разделения жидких систем или смесей на фракции по плотности." },
-            { w: "СТЕТОСКОП", q: "Медицинский прибор для выслушивания (аускультации) шумов внутренних органов: лёгких, бронхов, сердца, сосудов." }
+            { w: "СТЕТОСКОП", q: "Медицинский прибор для выслушивания (аускультации) шумов внутренних органов: лёгких, бронхов, сердца, сосудов." },
+            { w: "ТРАНЗИСТОР", q: "Радиоэлектронный компонент из полупроводникового материала, позволяющий управлять током в электрической цепи, основа современной электроники." },
+            { w: "ТЕОДОЛИТ", q: "Точный измерительный прибор для определения горизонтальных и вертикальных углов при топографических съёмках и в строительстве." },
+            { w: "ОСЦИЛЛОГРАФ", q: "Прибор, предназначенный для исследования амплитудных и временных параметров электрического сигнала путем визуализации его на экране." },
+            { w: "СПЕКТРОМЕТР", q: "Оптический прибор, используемый в научных исследованиях для накопления спектра излучения и его детального анализа." },
+            { w: "КОЛЛАЙДЕР", q: "Огромный ускоритель частиц на встречных пучках, предназначенный для изучения продуктов их столкновений при околосветовых скоростях." },
+            { w: "АНЕМОМЕТР", q: "Метеорологический прибор для измерения скорости ветра и газовых потоков." },
+            { w: "ГИГРОМЕТР", q: "Измерительный прибор, применяемый в метеорологии и в быту для определения влажности воздуха." },
+            { w: "ДОЗИМЕТР", q: "Прибор для измерения эффективной дозы или мощности ионизирующего (радиационного) излучения за определенное время." },
+            { w: "ИНТЕРФЕРОМЕТР", q: "Высокоточный измерительный прибор, принцип действия которого основан на явлении наложения электромагнитных или акустических волн." },
+            { w: "КУРВИМЕТР", q: "Механический или электронный прибор с колесиком для измерения длины извилистых линий на топографических картах и чертежах." },
+            { w: "ПЛАНЕТАРИЙ", q: "Специальный прибор, проецирующий реалистичные изображения звёздного неба, Солнца, Луны и планет на полусферический купол-экран." },
+            { w: "СЕЙСМОГРАФ", q: "Специальный чувствительный прибор для обнаружения и записи всех типов волн, вызванных землетрясениями." },
+            { w: "ТАХЕОМЕТР", q: "Современный электронно-оптический геодезический инструмент для измерения расстояний, горизонтальных и вертикальных углов." },
+            { w: "ХРОНОМЕТР", q: "Часы с особо точным ходом, первоначально применявшиеся в морской навигации для определения долготы." },
+            { w: "ЭНДОСКОП", q: "Оптический прибор с гибкой трубкой для визуального осмотра труднодоступных полостей в медицине или технике." }
         ];
 
         // --- STATE VARIABLES ---
         
-        let currentGame = 0; // 1 or 2
+        let currentGame = 0;
         let currentLevel = 0;
         let currentWord = "";
         let currentQuestion = "";
         
-        // Game 1 Specific
+        // Game 1
         let guessedLetters = [];
-        let wrongAttempts = 0;
-        const maxWrong = 5;
 
-        // Game 2 Specific
+        // Game 2
         let hintLevel = 0;
 
         // --- NAVIGATION ---
@@ -435,12 +467,11 @@
             document.getElementById('menu-screen').classList.add('active');
         }
 
-        // --- GAME 1: POLE CHUDES LOGIC ---
+        // --- GAME 1 LOGIC ---
 
         function startGame1() {
             currentGame = 1;
-            // Shuffle data to make it random
-            dataGame1.sort(() => Math.random() - 0.5);
+            dataGame1.sort(() => Math.random() - 0.5); // Shuffle
             currentLevel = 0;
             hideAllScreens();
             document.getElementById('game1-screen').classList.add('active');
@@ -449,16 +480,14 @@
 
         function loadGame1Level() {
             if (currentLevel >= dataGame1.length) {
-                currentLevel = 0; // Loop or end game
+                currentLevel = 0; // Restart if all 30 are done
             }
             
             currentWord = dataGame1[currentLevel].w;
             currentQuestion = dataGame1[currentLevel].q;
             guessedLetters = [];
-            wrongAttempts = 0;
 
             document.getElementById('g1-level').innerText = `Вопрос: ${currentLevel + 1}/${dataGame1.length}`;
-            document.getElementById('g1-lives').innerText = `Ошибки: ${wrongAttempts}/${maxWrong}`;
             document.getElementById('g1-question').innerText = currentQuestion;
 
             renderBoard();
@@ -503,12 +532,7 @@
                 renderBoard();
                 checkGame1Win();
             } else {
-                btn.classList.add('wrong');
-                wrongAttempts++;
-                document.getElementById('g1-lives').innerText = `Ошибки: ${wrongAttempts}/${maxWrong}`;
-                if (wrongAttempts >= maxWrong) {
-                    endLevel(false);
-                }
+                btn.classList.add('wrong'); // Just turns red, no game over
             }
         }
 
@@ -520,10 +544,12 @@
                     break;
                 }
             }
-            if (won) endLevel(true);
+            if (won) {
+                setTimeout(showWinModal, 500);
+            }
         }
 
-        // --- GAME 2: GUESS OBJECT LOGIC ---
+        // --- GAME 2 LOGIC ---
 
         function startGame2() {
             currentGame = 2;
@@ -559,9 +585,10 @@
 
             if (answer === currentWord) {
                 input.style.borderColor = 'var(--success)';
-                endLevel(true);
+                showWinModal();
             } else {
                 input.style.borderColor = 'var(--danger)';
+                // Reset color after 1s so they can try again infinitely
                 setTimeout(() => {
                     input.style.borderColor = 'var(--surface-border)';
                 }, 1000);
@@ -573,11 +600,12 @@
             const hintElement = document.getElementById('g2-hint');
             
             if (hintLevel === 1) {
-                hintElement.innerText = `Подсказка: Слово состоит из ${currentWord.length} букв.`;
+                hintElement.innerText = `Подсказка: В слове ${currentWord.length} букв.`;
             } else if (hintLevel === 2) {
                 hintElement.innerText = `Подсказка: Первая буква "${currentWord[0]}", последняя "${currentWord[currentWord.length-1]}".`;
             } else {
-                endLevel(false); // Gave up
+                // No failure, just give the word so they can type it
+                hintElement.innerText = `Сдаетесь? Ответ: ${currentWord}. Просто введите его!`;
             }
         }
 
@@ -585,25 +613,14 @@
             if (e.key === 'Enter') checkGame2Answer();
         });
 
+        // --- MODALS ---
 
-        // --- COMMON LOGIC & MODALS ---
-
-        function endLevel(isWin) {
+        function showWinModal() {
             const modal = document.getElementById('result-modal');
-            const title = document.getElementById('modal-title');
             const wordDisplay = document.getElementById('modal-word');
             const nextBtn = document.getElementById('modal-next-btn');
 
             wordDisplay.innerText = currentWord;
-
-            if (isWin) {
-                title.innerText = "Идеально!";
-                title.style.color = "var(--success)";
-            } else {
-                title.innerText = "Провал";
-                title.style.color = "var(--danger)";
-            }
-
             modal.classList.add('active');
 
             nextBtn.onclick = () => {
