@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Mini-Games</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap');
+
+        :root {
+            --bg-color: #0a0a0a;
+            --surface-color: rgba(255, 255, 255, 0.03);
+            --surface-border: rgba(212, 175, 55, 0.2);
+            --accent-gold: #d4af37;
+            --accent-gold-hover: #f3c32b;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #1a1a1a, var(--bg-color));
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: var(--surface-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--surface-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        h1, h2 {
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        h1 span {
+            color: var(--accent-gold);
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--accent-gold);
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--accent-gold);
+            color: #000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-gold-hover);
+        }
+
+        .btn-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            border-color: var(--text-muted);
+            color: var(--text-muted);
+        }
+        
+        .btn-back:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+            background: transparent;
+            box-shadow: none;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Game 1: Pole Chudes Elements */
+        .question-box {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .word-board {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .letter-box {
+            width: 50px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--surface-border);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .letter-box.revealed {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .key {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .key:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--accent-gold);
+        }
+
+        .key:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .key.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .key.wrong {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+
+        .stats {
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Game 2: Guess the object Elements */
+        .input-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .input-text {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--surface-border);
+            padding: 18px 20px;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1.2rem;
+            outline: none;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .input-text:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .hints {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            min-height: 20px;
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--bg-color);
+            border: 1px solid var(--accent-gold);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 15px;
+        }
+
+        .modal-content .correct-word {
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 25px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div id="menu-screen" class="screen active glass-panel">
+            <h1>Mind <span>Games</span></h1>
+            <p class="subtitle">Выберите интеллектуальное испытание. Премиальный опыт, сложные вопросы и проверка вашей эрудиции.</p>
+            
+            <div class="menu-buttons">
+                <button class="btn btn-primary" onclick="startGame1()">Поле Чудес</button>
+                <button class="btn" onclick="startGame2()">Угадай Вещь</button>
+            </div>
+        </div>
+
+        <div id="game1-screen" class="screen glass-panel">
+            <button class="btn btn-back" onclick="showMenu()">← Назад</button>
+            <h2>Поле <span>Чудес</span></h2>
+            
+            <div class="stats">
+                <span id="g1-level">Вопрос: 1/15</span>
+                <span id="g1-lives">Ошибки: 0/5</span>
+            </div>
+
+            <div class="question-box" id="g1-question">
+                Загрузка вопроса...
+            </div>
+
+            <div class="word-board" id="g1-board"></div>
+            
+            <div class="keyboard" id="g1-keyboard"></div>
+        </div>
+
+        <div id="game2-screen" class="screen glass-panel">
+            <button class="btn btn-back" onclick="showMenu()">← Назад</button>
+            <h2>Угадай <span>Вещь</span></h2>
+            
+            <div class="stats">
+                <span id="g2-level">Уровень: 1/15</span>
+            </div>
+
+            <div class="question-box" id="g2-description">
+                Загрузка описания...
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="g2-input" class="input-text" placeholder="ВВЕДИТЕ ОТВЕТ" autocomplete="off">
+                <div class="hints" id="g2-hint"></div>
+            </div>
+
+            <button class="btn btn-primary" onclick="checkGame2Answer()">Ответить</button>
+            <button class="btn" onclick="giveGame2Hint()">Подсказка</button>
+        </div>
+
+    </div>
+
+    <div class="modal-overlay" id="result-modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Победа!</h2>
+            <p>Загаданное слово было:</p>
+            <div class="correct-word" id="modal-word">СЛОВО</div>
+            <button class="btn btn-primary" id="modal-next-btn">Следующий вопрос</button>
+            <button class="btn" onclick="showMenu()">В меню</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA ---
+
+        const dataGame1 = [
+            { w: "ЭСПЕРАНТО", q: "Искусственный язык, созданный в 1887 году варшавским окулистом Людвиком Заменгофом." },
+            { w: "ДОПЛЕР", q: "Эффект изменения частоты волны, регистрируемой приёмником, вызванный движением её источника." },
+            { w: "АГНОСТИЦИЗМ", q: "Философская концепция, согласно которой мир непознаваем, и люди не могут знать ничего достоверного о Боге." },
+            { w: "ГЕРАЛЬДИКА", q: "Специальная историческая дисциплина, занимающаяся изучением гербов, а также традиций и практики их использования." },
+            { w: "НУМИЗМАТИКА", q: "Вспомогательная историческая дисциплина, изучающая историю монетной чеканки и денежного обращения." },
+            { w: "ПЛУТОКРАТИЯ", q: "Форма правления, при которой решения правительства определяются мнением не всего народа, а влиятельного класса богатых людей." },
+            { w: "СИРИУС", q: "Самая яркая звезда ночного неба, расположенная в созвездии Большого Пса." },
+            { w: "ГИЛЬГАМЕШ", q: "Правитель шумерского города Урук, ставший героем древнейшего сохранившегося эпического произведения." },
+            { w: "ДЕНАТУРАЦИЯ", q: "Процесс потери белками их естественной структуры под воздействием различных факторов (например, температуры)." },
+            { w: "КОНФОРМИЗМ", q: "Пассивное, некритичное принятие господствующего порядка, мнений, традиций и стандартов массового сознания." },
+            { w: "СИНЕКДОХА", q: "Троп, разновидность метонимии, основанная на перенесении значения с одного явления на другое по признаку количественного отношения между ними." },
+            { w: "ЭМАНСИПАЦИЯ", q: "Отказ от различного рода социальных зависимостей, в том числе детей от родителей, женщин от мужчин." },
+            { w: "АПОГЕЙ", q: "Точка орбиты Луны или искусственного спутника Земли, наиболее удаленная от центра Земли." },
+            { w: "МЕЛАНХОЛИЯ", q: "Термин, обозначавший в медицине прошлого психическое расстройство, сопровождающееся подавленным настроением. Введено Гиппократом." },
+            { w: "ОСТРАКИЗМ", q: "В Древних Афинах — народное голосование, во время которого граждане на глиняных черепках писали имя деятеля, угрожающего демократии." }
+        ];
+
+        const dataGame2 = [
+            { w: "ГЕНЕРАТОР", q: "Устройство, аппарат или машина, производящие какие-либо продукты, вырабатывающие электрическую энергию или преобразующие один вид энергии в другой." },
+            { w: "АЛМАЗ", q: "Минерал, кубическая аллотропная форма углерода. Самый твердый по шкале Мооса." },
+            { w: "МИКРОСКОП", q: "Прибор, предназначенный для получения увеличенных изображений, а также измерения объектов или деталей структуры, невидимых невооруженным глазом." },
+            { w: "БАРОМЕТР", q: "Прибор для измерения атмосферного давления. Бывает ртутным и механическим (анероид)." },
+            { w: "ОЗОН", q: "Газ голубого цвета с резким специфическим запахом, состоящий из трехатомных молекул кислорода. Защищает Землю от ультрафиолета." },
+            { w: "ЛАЗЕР", q: "Устройство, преобразующее энергию накачки в узконаправленный, монохроматический и когерентный поток излучения." },
+            { w: "ПАРАШЮТ", q: "Устройство из ткани, предназначенное для торможения объекта за счёт сопротивления атмосферы." },
+            { w: "СКАФАНДР", q: "Специальное снаряжение, предназначенное для изоляции человека от внешней среды (под водой или в космосе)." },
+            { w: "ЭХОЛОТ", q: "Узкоспециализированный гидролокатор, оборудование для исследования рельефа дна водного бассейна." },
+            { w: "ТЕЛЕСКОП", q: "Прибор, с помощью которого можно наблюдать отдаленные объекты путем сбора электромагнитного излучения." },
+            { w: "ГАЛЬВАНОМЕТР", q: "Высокочувствительный прибор для измерения малых постоянных электрических токов." },
+            { w: "АКСЕЛЕРОМЕТР", q: "Прибор, измеряющий проекцию кажущегося ускорения. Широко используется в современных смартфонах для определения ориентации экрана." },
+            { w: "МЕТРОНОМ", q: "Прибор, отмечающий короткие промежутки времени равномерными ударами. В основном используется музыкантами как точный ориентир темпа." },
+            { w: "ЦЕНТРИФУГА", q: "Устройство, использующее центробежную силу для разделения жидких систем или смесей на фракции по плотности." },
+            { w: "СТЕТОСКОП", q: "Медицинский прибор для выслушивания (аускультации) шумов внутренних органов: лёгких, бронхов, сердца, сосудов." }
+        ];
+
+        // --- STATE VARIABLES ---
+        
+        let currentGame = 0; // 1 or 2
+        let currentLevel = 0;
+        let currentWord = "";
+        let currentQuestion = "";
+        
+        // Game 1 Specific
+        let guessedLetters = [];
+        let wrongAttempts = 0;
+        const maxWrong = 5;
+
+        // Game 2 Specific
+        let hintLevel = 0;
+
+        // --- NAVIGATION ---
+
+        function hideAllScreens() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            closeModal();
+        }
+
+        function showMenu() {
+            hideAllScreens();
+            document.getElementById('menu-screen').classList.add('active');
+        }
+
+        // --- GAME 1: POLE CHUDES LOGIC ---
+
+        function startGame1() {
+            currentGame = 1;
+            // Shuffle data to make it random
+            dataGame1.sort(() => Math.random() - 0.5);
+            currentLevel = 0;
+            hideAllScreens();
+            document.getElementById('game1-screen').classList.add('active');
+            loadGame1Level();
+        }
+
+        function loadGame1Level() {
+            if (currentLevel >= dataGame1.length) {
+                currentLevel = 0; // Loop or end game
+            }
+            
+            currentWord = dataGame1[currentLevel].w;
+            currentQuestion = dataGame1[currentLevel].q;
+            guessedLetters = [];
+            wrongAttempts = 0;
+
+            document.getElementById('g1-level').innerText = `Вопрос: ${currentLevel + 1}/${dataGame1.length}`;
+            document.getElementById('g1-lives').innerText = `Ошибки: ${wrongAttempts}/${maxWrong}`;
+            document.getElementById('g1-question').innerText = currentQuestion;
+
+            renderBoard();
+            renderKeyboard();
+        }
+
+        function renderBoard() {
+            const board = document.getElementById('g1-board');
+            board.innerHTML = '';
+            
+            for (let char of currentWord) {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+                if (guessedLetters.includes(char)) {
+                    box.innerText = char;
+                    box.classList.add('revealed');
+                }
+                board.appendChild(box);
+            }
+        }
+
+        function renderKeyboard() {
+            const kb = document.getElementById('g1-keyboard');
+            kb.innerHTML = '';
+            const alphabet = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+            
+            for (let char of alphabet) {
+                const btn = document.createElement('button');
+                btn.className = 'key';
+                btn.innerText = char;
+                btn.onclick = () => handleLetterClick(char, btn);
+                kb.appendChild(btn);
+            }
+        }
+
+        function handleLetterClick(char, btn) {
+            btn.disabled = true;
+
+            if (currentWord.includes(char)) {
+                btn.classList.add('correct');
+                guessedLetters.push(char);
+                renderBoard();
+                checkGame1Win();
+            } else {
+                btn.classList.add('wrong');
+                wrongAttempts++;
+                document.getElementById('g1-lives').innerText = `Ошибки: ${wrongAttempts}/${maxWrong}`;
+                if (wrongAttempts >= maxWrong) {
+                    endLevel(false);
+                }
+            }
+        }
+
+        function checkGame1Win() {
+            let won = true;
+            for (let char of currentWord) {
+                if (!guessedLetters.includes(char)) {
+                    won = false;
+                    break;
+                }
+            }
+            if (won) endLevel(true);
+        }
+
+        // --- GAME 2: GUESS OBJECT LOGIC ---
+
+        function startGame2() {
+            currentGame = 2;
+            dataGame2.sort(() => Math.random() - 0.5);
+            currentLevel = 0;
+            hideAllScreens();
+            document.getElementById('game2-screen').classList.add('active');
+            loadGame2Level();
+        }
+
+        function loadGame2Level() {
+            if (currentLevel >= dataGame2.length) {
+                currentLevel = 0;
+            }
+            
+            currentWord = dataGame2[currentLevel].w;
+            currentQuestion = dataGame2[currentLevel].q;
+            hintLevel = 0;
+
+            document.getElementById('g2-level').innerText = `Уровень: ${currentLevel + 1}/${dataGame2.length}`;
+            document.getElementById('g2-description').innerText = currentQuestion;
+            document.getElementById('g2-hint').innerText = '';
+            
+            const input = document.getElementById('g2-input');
+            input.value = '';
+            input.style.borderColor = 'var(--surface-border)';
+            input.focus();
+        }
+
+        function checkGame2Answer() {
+            const input = document.getElementById('g2-input');
+            const answer = input.value.trim().toUpperCase();
+
+            if (answer === currentWord) {
+                input.style.borderColor = 'var(--success)';
+                endLevel(true);
+            } else {
+                input.style.borderColor = 'var(--danger)';
+                setTimeout(() => {
+                    input.style.borderColor = 'var(--surface-border)';
+                }, 1000);
+            }
+        }
+
+        function giveGame2Hint() {
+            hintLevel++;
+            const hintElement = document.getElementById('g2-hint');
+            
+            if (hintLevel === 1) {
+                hintElement.innerText = `Подсказка: Слово состоит из ${currentWord.length} букв.`;
+            } else if (hintLevel === 2) {
+                hintElement.innerText = `Подсказка: Первая буква "${currentWord[0]}", последняя "${currentWord[currentWord.length-1]}".`;
+            } else {
+                endLevel(false); // Gave up
+            }
+        }
+
+        document.getElementById('g2-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkGame2Answer();
+        });
+
+
+        // --- COMMON LOGIC & MODALS ---
+
+        function endLevel(isWin) {
+            const modal = document.getElementById('result-modal');
+            const title = document.getElementById('modal-title');
+            const wordDisplay = document.getElementById('modal-word');
+            const nextBtn = document.getElementById('modal-next-btn');
+
+            wordDisplay.innerText = currentWord;
+
+            if (isWin) {
+                title.innerText = "Идеально!";
+                title.style.color = "var(--success)";
+            } else {
+                title.innerText = "Провал";
+                title.style.color = "var(--danger)";
+            }
+
+            modal.classList.add('active');
+
+            nextBtn.onclick = () => {
+                closeModal();
+                currentLevel++;
+                if (currentGame === 1) loadGame1Level();
+                else loadGame2Level();
+            };
+        }
+
+        function closeModal() {
+            document.getElementById('result-modal').classList.remove('active');
+        }
+
+    </script>
+</body>
+</html>
